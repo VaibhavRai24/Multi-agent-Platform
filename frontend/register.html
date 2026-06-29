@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - NexusAI Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body class="auth-layout container-centered">
+    <div class="auth-card glass-panel">
+        <div class="brand">
+            <h1>Nexus<span class="highlight">AI</span></h1>
+            <p>Create your account</p>
+        </div>
+
+        <form id="register-form">
+            <div class="input-group">
+                <i class="fa-regular fa-user"></i>
+                <input type="text" id="full-name" placeholder="Full name" required>
+            </div>
+            <div class="input-group">
+                <i class="fa-regular fa-envelope"></i>
+                <input type="email" id="email" placeholder="Email address" required>
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="password" placeholder="Password" minlength="8" required>
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="confirm-password" placeholder="Confirm password" minlength="8" required>
+            </div>
+            <button type="submit" class="primary-btn full-width">Create Account</button>
+        </form>
+
+        <div class="divider"><span>OR</span></div>
+
+        <button class="oauth-btn full-width" onclick="window.location.href='/api/v1/auth/google-login'">
+            <i class="fa-brands fa-google"></i> Continue with Google
+        </button>
+
+        <div id="auth-error" class="error-text" style="display: none;"></div>
+        <div id="auth-success" class="error-text" style="display: none; color: var(--success);"></div>
+
+        <div class="auth-footer">
+            Already have an account? <a href="login.html">Sign in</a>
+        </div>
+    </div>
+
+    <script src="js/api.js?v=2"></script>
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fullName = document.getElementById('full-name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const errorDiv = document.getElementById('auth-error');
+            const successDiv = document.getElementById('auth-success');
+
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+
+            if (password !== confirmPassword) {
+                errorDiv.innerText = 'Passwords do not match.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                await api.register(email, password, fullName);
+                successDiv.innerText = 'Account created! Redirecting to sign in...';
+                successDiv.style.display = 'block';
+                setTimeout(() => { window.location.href = 'login.html'; }, 1200);
+            } catch (error) {
+                errorDiv.innerText = error.message || 'Could not create account.';
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

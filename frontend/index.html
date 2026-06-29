@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise AI Platform</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Marked.js (Markdown rendering) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/style.css?v=4">
+    <link rel="stylesheet" href="css/reports.css?v=1">
+</head>
+<body>
+    <div id="toast-container" class="toast-container"></div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Nexus<span class="highlight">AI</span></h2>
+            </div>
+            
+            <button class="new-chat-btn" onclick="app.startNewChat()">
+                <i class="fa-solid fa-plus"></i> New Chat
+            </button>
+            
+            <div class="nav-group">
+                <h3>Main Menu</h3>
+                <ul class="nav-links">
+                    <li class="active" data-page="chat-page" onclick="app.navigate('chat-page')">
+                        <i class="fa-regular fa-comments"></i> Chat Interface
+                    </li>
+                    <li data-page="documents-page" onclick="app.navigate('documents-page')">
+                        <i class="fa-regular fa-folder-open"></i> Documents Center
+                    </li>
+                    <li data-page="reports-page" onclick="app.navigate('reports-page')">
+                        <i class="fa-regular fa-file-lines"></i> Generated Reports
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="nav-group">
+                <h3>History</h3>
+                <ul class="nav-links history-list" id="chat-history-list">
+                    <!-- Loaded dynamically via JS -->
+                </ul>
+            </div>
+
+            <div class="sidebar-footer">
+                <ul class="nav-links">
+                    <li data-page="profile-page" onclick="app.navigate('profile-page')">
+                        <i class="fa-regular fa-user"></i> Profile
+                    </li>
+                    <li onclick="app.toggleTheme()">
+                        <i class="fa-solid fa-circle-half-stroke"></i> Toggle Theme
+                    </li>
+                    <li class="logout" onclick="auth.logout()">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Chat Page -->
+            <section id="chat-page" class="page-section active">
+                <header class="page-header">
+                    <div class="agent-selector">
+                        <label>Agent Mode:</label>
+                        <select id="agent-mode" class="glass-select" onchange="chatApp.onAgentModeChange(this.value)">
+                            <option value="auto">🤖 Auto Route (Default)</option>
+                            <option value="web">🌐 Web Search</option>
+                            <option value="rag">📚 RAG Document Analysis</option>
+                            <option value="summary">📝 Summary Agent</option>
+                            <option value="report">📑 Report Writer</option>
+                        </select>
+                    </div>
+                    <div id="rag-context-banner" class="rag-banner hidden">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span>Querying your <strong>Document Knowledge Base</strong></span>
+                        <a onclick="app.navigate('documents-page')" style="cursor:pointer;text-decoration:underline;font-size:0.8rem">Manage files</a>
+                    </div>
+                </header>
+
+                <div class="chat-container">
+                    <div id="chat-messages" class="chat-messages">
+                        <!-- Messages span appended dynamically -->
+                        <div class="message assistant-msg welcome-msg">
+                            <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+                            <div class="content">
+                                <p>Hello! I am your Enterprise AI Assistant. How can I help you today?</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-area">
+                        <div class="input-wrapper glass-panel">
+                            <textarea id="chat-input" placeholder="Ask a question or request research..." rows="1" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"></textarea>
+                            <button id="send-btn" class="send-btn" onclick="chatApp.sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                        <div class="agent-status" id="agent-status">Standing by...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Documents Center Page -->
+            <section id="documents-page" class="page-section hidden">
+                <header class="page-header">
+                    <div>
+                        <h1>Document Center</h1>
+                        <p style="color:var(--text-secondary);font-size:0.9rem;margin-top:4px">Upload files to build your AI knowledge base &mdash; PDFs, Word docs, spreadsheets, images &amp; more</p>
+                    </div>
+                    <div class="doc-center-tip glass-panel">
+                        <i class="fa-solid fa-circle-info" style="color:var(--accent-color)"></i>
+                        <span>Use <strong>RAG Document Analysis</strong> mode in chat to query these files</span>
+                    </div>
+                </header>
+                
+                <div class="dashboard-stats">
+                    <div class="stat-card glass-panel">
+                        <i class="fa-solid fa-database" style="color:var(--accent-color)"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-total-docs">0</span>
+                            <span class="stat-label">Files in Knowledge Base</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <i class="fa-solid fa-cubes" style="color:#10b981"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-total-chunks">—</span>
+                            <span class="stat-label">Vector Chunks Indexed</span>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <i class="fa-solid fa-circle-check" style="color:#a855f7"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-pinecone-status">Active</span>
+                            <span class="stat-label">Pinecone Index</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="upload-area glass-panel" id="drop-zone">
+                    <i class="fa-solid fa-cloud-arrow-up display-icon"></i>
+                    <h3>Drag &amp; Drop Files Here</h3>
+                    <p style="color:var(--text-secondary);margin:8px 0 16px">Supports PDF, DOCX, TXT, CSV, Excel, PNG, JPG &amp; more &mdash; up to 50 MB</p>
+                    <div class="upload-type-pills">
+                        <span class="type-pill"><i class="fa-regular fa-file-pdf"></i> PDF</span>
+                        <span class="type-pill"><i class="fa-regular fa-file-word"></i> DOCX</span>
+                        <span class="type-pill"><i class="fa-regular fa-file-excel"></i> CSV/XLSX</span>
+                        <span class="type-pill"><i class="fa-regular fa-file-image"></i> Images</span>
+                        <span class="type-pill"><i class="fa-regular fa-file-lines"></i> TXT/MD</span>
+                    </div>
+                    <input type="file" id="file-upload" class="hidden-file-input" multiple
+                        accept=".pdf,.docx,.csv,.xlsx,.xls,.txt,.md,.png,.jpg,.jpeg,.webp,.gif">
+                    <button class="upload-browse-btn" onclick="document.getElementById('file-upload').click()">
+                        <i class="fa-solid fa-plus"></i> Browse &amp; Upload
+                    </button>
+                    <div class="progress-bar-container" style="display:none" id="upload-progress-container">
+                        <div class="progress-bar" id="upload-progress" style="width:0%"></div>
+                    </div>
+                    <p id="upload-status-label" style="font-size:0.8rem;color:var(--text-secondary);margin-top:10px;min-height:1.2em"></p>
+                </div>
+
+                <div class="documents-list-container">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+                        <h3>Knowledge Base Files</h3>
+                        <button class="refresh-btn" onclick="docApp.loadDocuments()" title="Refresh list">
+                            <i class="fa-solid fa-rotate-right"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="glass-panel" style="border-radius:12px;overflow:hidden">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Type</th>
+                                    <th>Uploaded</th>
+                                    <th>Chunks</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="documents-tbody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports Page -->
+            <section id="reports-page" class="page-section hidden">
+                <header class="page-header">
+                    <h1>Generated Reports</h1>
+                </header>
+                <div class="reports-grid" id="reports-grid">
+                    <!-- Populated dynamically by reports.js -->
+                </div>
+            </section>
+
+            <!-- Profile Page -->
+            <section id="profile-page" class="page-section hidden">
+                <header class="page-header">
+                    <h1>User Profile</h1>
+                </header>
+                <div class="profile-card glass-panel">
+                    <div class="profile-header">
+                        <div class="avatar large"><i class="fa-solid fa-user"></i></div>
+                        <div class="info">
+                            <h2 id="profile-name">User Name</h2>
+                            <p id="profile-email">user@company.com</p>
+                            <span class="role-badge">Admin</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="profile-stats">
+                        <div class="stat"><span class="value" id="profile-doc-count">0</span> Documents</div>
+                        <div class="stat"><span class="value" id="profile-report-count">0</span> Reports Generated</div>
+                        <div class="stat"><span class="value" id="profile-chat-count">0</span> Chats</div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Report Suggestion Modal -->
+    <div id="report-suggest-modal" class="modal-overlay hidden">
+        <div class="modal-box glass-panel">
+            <div class="modal-icon"><i class="fa-regular fa-file-lines"></i></div>
+            <h3>Save this as a report?</h3>
+            <p class="modal-sub">This answer looks substantial enough to save. Pick a title and format — or skip, a Markdown copy is kept automatically either way.</p>
+            <div class="modal-field">
+                <label for="report-title-input">Report title</label>
+                <input type="text" id="report-title-input" placeholder="e.g. Q1 Market Trends Summary">
+            </div>
+            <div class="modal-field">
+                <label>Format</label>
+                <div class="format-toggle">
+                    <button type="button" class="format-btn active" data-format="docx" onclick="reportApp.selectModalFormat('docx')">
+                        <i class="fa-regular fa-file-word"></i> Word (.docx)
+                    </button>
+                    <button type="button" class="format-btn" data-format="markdown" onclick="reportApp.selectModalFormat('markdown')">
+                        <i class="fa-regular fa-file-lines"></i> Markdown (.md)
+                    </button>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn-secondary" onclick="reportApp.dismissSuggestModal()">No thanks</button>
+                <button class="modal-btn-primary" onclick="reportApp.confirmSuggestModal()">
+                    <i class="fa-solid fa-floppy-disk"></i> Save report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Viewer Modal -->
+    <div id="report-view-modal" class="modal-overlay hidden">
+        <div class="modal-box glass-panel modal-box-wide">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+                <h3 id="report-view-title">Report</h3>
+                <button class="modal-close-btn" onclick="reportApp.closeViewModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="report-view-body" class="report-view-body"></div>
+        </div>
+    </div>
+
+    <!-- Scripts (reports.js must come before chat.js so reportApp is defined first) -->
+    <script src="js/api.js?v=4"></script>
+    <script src="js/app.js?v=4"></script>
+    <script src="js/reports.js?v=1"></script>
+    <script src="js/chat.js?v=4"></script>
+    <script src="js/documents.js?v=4"></script>
+</body>
+</html>
