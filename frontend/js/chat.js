@@ -4,6 +4,7 @@ const chatApp = {
     agentStatus: document.getElementById('agent-status'),
     lastQuery: '',
     pendingReport: null, // { content, suggestedTitle, format } awaiting modal decision
+    activeChatId: null,  // currently active chat session id (null = new, unsaved chat)
 
     bind() {
         this.inputField.addEventListener('keypress', (e) => {
@@ -26,6 +27,7 @@ const chatApp = {
     },
 
     clearChat() {
+        this.activeChatId = null;
         this.messagesContainer.innerHTML = `
             <div class="message assistant-msg welcome-msg">
                 <div class="avatar"><i class="fa-solid fa-robot"></i></div>
@@ -33,6 +35,33 @@ const chatApp = {
                     <p>Hello! I am your Enterprise AI Assistant. How can I help you today?</p>
                 </div>
             </div>`;
+        document.querySelectorAll('#chat-history-list li').forEach(li => li.classList.remove('active-session'));
+        if (window.traceApp) traceApp.render([], {});
+    },
+
+    // Renders a previously saved session's full message list into the chat pane.
+    loadSessionMessages(chatId, messages) {
+        this.activeChatId = chatId;
+        this.messagesContainer.innerHTML = '';
+        if (!messages || messages.length === 0) {
+            this.messagesContainer.innerHTML = `
+                <div class="message assistant-msg welcome-msg">
+                    <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+                    <div class="content"><p>This conversation has no messages yet.</p></div>
+                </div>`;
+        } else {
+            messages.forEach(m => this.appendMessage(m.role, m.content));
+        }
+
+        // No step-by-step trace exists for a reloaded session (it's not
+        // persisted, only the latest working memory is), so clear the step
+        // list but fetch and show the session's current working memory.
+        if (window.traceApp) {
+            traceApp.render([], {});
+            api.request(`/chat/sessions/${chatId}/memory`)
+                .then(res => { if (res && res.working_memory) traceApp.render([], res.working_memory); })
+                .catch(() => {});
+        }
     },
 
     async sendMessage() {
@@ -54,10 +83,26 @@ const chatApp = {
         this.appendMessage('assistant', '<i class="fa-solid fa-circle-notch fa-spin"></i> Generating response...', loadingId);
 
         try {
-            const response = await api.askQuestion(text, { agent: agentMode });
-            this.updateMessage(loadingId, response.response || "No response provided", response.sources);
+            const response = await api.askQuestion(text, { agent: agentMode, chat_id: this.activeChatId });
+            this.updateMessage(loadingId, response.response || "No response provided", response.sources, response.source_type);
             this.agentStatus.textContent = 'Standing by...';
             this.agentStatus.style.color = 'var(--text-secondary)';
+
+            // Render the agent communication log + working memory snapshot
+            // for this turn into the trace panel.
+            console.log('[TRACE DEBUG] response.agent_trace:', response.agent_trace, 'response.working_memory:', response.working_memory);
+            if (window.traceApp) {
+                traceApp.render(response.agent_trace, response.working_memory);
+            }
+
+            // Track / adopt the session id assigned by the backend so follow-up
+            // messages in this conversation append to the same chat session.
+            if (response.chat_id) {
+                this.activeChatId = response.chat_id;
+            }
+            if (window.historyApp) {
+                historyApp.refresh(this.activeChatId);
+            }
 
             // Report pipeline: backend decides (via LLM) whether this answer is
             // worth keeping as a report. If so it is auto-saved in the background,
@@ -94,12 +139,13 @@ const chatApp = {
         this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
     },
 
-    updateMessage(id, markdownContent, sources) {
+    updateMessage(id, markdownContent, sources, sourceType) {
         const msgDiv = document.getElementById(id);
         if (msgDiv) {
             let finalHTML = marked.parse(markdownContent);
-            if (sources && sources.length > 0) {
-                // Extract unique source filenames from the context strings like "[filename] (score=0.82) text..."
+
+            if (sources && sources.length > 0 && sourceType === 'document') {
+                // RAG / Summary agent — these are real uploaded files, show as document pills.
                 const sourceNames = [...new Set(
                     sources.map(s => {
                         const m = s.match(/^\[([^\]]+)\]/);
@@ -119,7 +165,26 @@ const chatApp = {
                     }).join('');
                     finalHTML += `<div class="source-citations"><span class="source-label"><i class="fa-solid fa-book-open"></i> From your documents:</span>${pills}</div>`;
                 }
+            } else if (sources && sources.length > 0 && sourceType === 'web') {
+                // Web Search agent — these are live web results, show as link pills instead.
+                const webSources = sources.map(s => {
+                    const m = s.match(/^\[([^\]]+)\]\s*\(([^)]+)\)/);
+                    return m ? { title: m[1], href: m[2] } : null;
+                }).filter(Boolean);
+                const seen = new Set();
+                const uniqueWebSources = webSources.filter(w => {
+                    if (seen.has(w.href)) return false;
+                    seen.add(w.href);
+                    return true;
+                });
+                if (uniqueWebSources.length > 0) {
+                    const pills = uniqueWebSources.map(w =>
+                        `<a class="source-pill" href="${this.escapeHTML(w.href)}" target="_blank" rel="noopener"><i class="fa-solid fa-globe"></i> ${this.escapeHTML(w.title)}</a>`
+                    ).join('');
+                    finalHTML += `<div class="source-citations"><span class="source-label"><i class="fa-solid fa-globe"></i> From the web:</span>${pills}</div>`;
+                }
             }
+
             msgDiv.querySelector('.content').innerHTML = finalHTML;
         }
         this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
@@ -168,3 +233,5 @@ document.addEventListener('DOMContentLoaded', () => {
         chatApp.bind();
     }
 });
+
+console.log('%c[chat.js] loaded — build marker v8', 'color: #a855f7; font-weight: bold; font-size: 14px;');

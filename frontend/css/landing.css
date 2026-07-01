@@ -1,0 +1,820 @@
+/* ============================================================
+   NexusAI  —  Landing Page Styles  (landing.css)
+   Loaded after style.css so CSS vars are already defined.
+   All selectors are namespaced with .ld- or .landing-body
+   to avoid colliding with the app shell.
+   ============================================================ */
+
+/* ── Reset for the landing body ─────────────────────────────── */
+.landing-body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: auto;           /* override the app-shell overflow:hidden */
+    min-height: 100vh;
+    background: var(--bg-main);
+}
+
+/* ── Shared layout helper ───────────────────────────────────── */
+.ld-container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 28px;
+}
+
+/* ── NAV ──────────────────────────────────────────────────────
+   Thin frosted bar that sticks at the top and gains a shadow
+   once the user scrolls past the hero fold.
+   ------------------------------------------------------------ */
+.ld-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 0 0;
+    transition: background 0.3s ease, box-shadow 0.3s ease,
+                border-bottom 0.3s ease;
+    border-bottom: 1px solid transparent;
+}
+
+.ld-nav.scrolled {
+    background: rgba(11, 14, 20, 0.85);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="light"] .ld-nav.scrolled {
+    background: rgba(248, 250, 252, 0.88);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.ld-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+}
+
+/* Brand mark */
+.ld-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+    cursor: default;
+}
+.ld-brand-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--accent-color);
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+/* Nav links */
+.ld-nav-links {
+    display: flex;
+    gap: 8px;
+}
+.ld-nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+}
+.ld-nav-links a:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+[data-theme="light"] .ld-nav-links a:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* Nav actions */
+.ld-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.ld-icon-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+    font-size: 0.9rem;
+}
+.ld-icon-btn:hover { color: var(--text-primary); background: rgba(255,255,255,0.06); }
+[data-theme="light"] .ld-icon-btn:hover { background: rgba(0,0,0,0.05); }
+
+.ld-link-btn {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+.ld-link-btn:hover { color: var(--text-primary); }
+
+.ld-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-family);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    padding: 9px 20px;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.ld-cta-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.ld-cta-lg {
+    font-size: 1rem;
+    padding: 13px 28px;
+    border-radius: 10px;
+    box-shadow: 0 4px 18px rgba(59,130,246,0.3);
+}
+.ld-cta-lg:hover {
+    box-shadow: 0 8px 28px rgba(59, 130, 246, 0.5);
+    transform: translateY(-2px);
+}
+
+/* ── HERO ─────────────────────────────────────────────────────
+   Full-viewport opening section with gradient glow behind it.
+   ------------------------------------------------------------ */
+.ld-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    overflow: hidden;
+}
+
+/* Radial gradient glow that sits behind everything */
+.ld-hero-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 70% 55% at 65% 42%, rgba(59,130,246,0.13) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 20% 80%, rgba(168,85,247,0.08) 0%, transparent 60%);
+    z-index: 0;
+}
+
+.ld-hero-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+/* Copy column */
+.ld-hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.ld-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    border: 1px solid rgba(59,130,246,0.3);
+    background: rgba(59,130,246,0.07);
+    padding: 5px 12px;
+    border-radius: 20px;
+    width: fit-content;
+}
+
+.ld-hero-copy h1 {
+    font-size: clamp(2.2rem, 4vw, 3.1rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    color: var(--text-primary);
+}
+.highlight { color: var(--accent-color); }
+
+.ld-hero-sub {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-width: 480px;
+}
+
+.ld-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+}
+
+.ld-ghost-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 10px 0;
+    transition: color 0.2s, gap 0.2s;
+}
+.ld-ghost-btn:hover { color: var(--text-primary); gap: 12px; }
+
+/* Trust badges below CTAs */
+.ld-hero-trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    padding-top: 8px;
+}
+.ld-trust-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+.ld-trust-item i { color: var(--accent-color); }
+
+/* ── Hero mockup ─────────────────────────────────────────────
+   A stylised recreation of the actual chat interface sitting
+   at the top-right of the hero, acting as the "product demo".
+   ------------------------------------------------------------ */
+.ld-hero-mockup {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ld-mockup-window {
+    width: 100%;
+    max-width: 480px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+        0 32px 80px rgba(0,0,0,0.4),
+        0 0 0 1px var(--border-color);
+    animation: floatWindow 6s ease-in-out infinite;
+}
+
+@keyframes floatWindow {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-10px); }
+}
+
+.ld-mockup-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.25);
+    border-bottom: 1px solid var(--border-color);
+}
+[data-theme="light"] .ld-mockup-titlebar { background: rgba(0,0,0,0.04); }
+
+.ld-mockup-dots {
+    display: flex;
+    gap: 6px;
+}
+.ld-mockup-dots span {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+}
+.ld-mockup-dots span:nth-child(1) { background: #ff5f57; }
+.ld-mockup-dots span:nth-child(2) { background: #febc2e; }
+.ld-mockup-dots span:nth-child(3) { background: #28c840; }
+
+.ld-mockup-titletext {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    flex: 1;
+    text-align: center;
+    padding-right: 52px; /* visually center past the dots */
+}
+
+.ld-mockup-agentbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+.ld-mockup-pill {
+    background: rgba(59,130,246,0.12);
+    color: var(--accent-color);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 0.76rem;
+    font-weight: 600;
+}
+
+.ld-mockup-msg {
+    display: flex;
+    gap: 10px;
+    padding: 14px 16px;
+    align-items: flex-start;
+}
+.ld-mockup-msg-user { justify-content: flex-end; }
+.ld-mockup-msg-bot  { justify-content: flex-start; }
+
+.ld-mockup-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+}
+
+.ld-mockup-bubble {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.84rem;
+    line-height: 1.5;
+}
+.ld-mockup-msg-user .ld-mockup-bubble {
+    background: var(--accent-color);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+}
+.ld-mockup-msg-bot .ld-mockup-bubble {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-bottom-left-radius: 4px;
+}
+[data-theme="light"] .ld-mockup-msg-bot .ld-mockup-bubble {
+    background: rgba(0,0,0,0.04);
+}
+
+/* Typewriter cursor */
+.ld-cursor {
+    display: inline-block;
+    animation: blink 0.9s step-end infinite;
+    color: var(--accent-color);
+    font-weight: 300;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.ld-mockup-sources {
+    padding: 10px 16px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+.ld-mockup-sources.visible { opacity: 1; }
+
+.ld-mockup-sources .source-label {
+    font-size: 0.73rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    width: 100%;
+}
+
+/* Floating cards around the mockup */
+.ld-floating-card {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 16px;
+    border-radius: 12px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    font-size: 0.82rem;
+    white-space: nowrap;
+}
+.ld-floating-card i {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+.ld-floating-card div { display: flex; flex-direction: column; gap: 1px; }
+.ld-floating-card strong { font-size: 0.82rem; color: var(--text-primary); }
+.ld-floating-card span  { font-size: 0.72rem; color: var(--text-secondary); }
+
+.ld-floating-report {
+    bottom: -24px;
+    right: -30px;
+    animation: floatChipA 7s ease-in-out infinite;
+}
+.ld-floating-report i { color: #10b981; }
+
+.ld-floating-history {
+    top: 60px;
+    left: -36px;
+    animation: floatChipB 8s ease-in-out infinite;
+}
+.ld-floating-history i { color: var(--accent-color); }
+
+@keyframes floatChipA {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+}
+@keyframes floatChipB {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(8px); }
+}
+
+/* ── STAT STRIP ───────────────────────────────────────────────
+   A single row of 4 metrics between hero and features.
+   ------------------------------------------------------------ */
+.ld-stats {
+    padding: 48px 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    margin-top: 80px;
+}
+
+.ld-stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    text-align: center;
+}
+
+.ld-stat { display: flex; flex-direction: column; gap: 6px; }
+
+.ld-stat-num {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+
+.ld-stat-label {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* ── SHARED SECTION CHROME ────────────────────────────────────
+   Section head (eyebrow + h2), generic spacing.
+   ------------------------------------------------------------ */
+.ld-section {
+    padding: 96px 0;
+}
+
+.ld-section-head {
+    text-align: center;
+    margin-bottom: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+.ld-section-head h2 {
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    max-width: 700px;
+    line-height: 1.2;
+}
+
+/* ── FEATURES GRID ────────────────────────────────────────────
+   Three feature cards, one per workspace.
+   ------------------------------------------------------------ */
+.ld-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.ld-feature-card {
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.ld-feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.25);
+}
+
+.ld-feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: var(--icon-color, var(--accent-color));
+    background: color-mix(in srgb, var(--icon-color, var(--accent-color)) 12%, transparent);
+}
+
+.ld-feature-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+.ld-feature-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    flex: 1;
+}
+.ld-feature-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: gap 0.2s;
+}
+.ld-feature-link:hover { gap: 10px; }
+
+/* ── AGENT LIST ───────────────────────────────────────────────
+   Vertical list of the five agent modes.
+   ------------------------------------------------------------ */
+.ld-agents-section {
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(59,130,246,0.04) 30%,
+        rgba(59,130,246,0.04) 70%,
+        transparent 100%
+    );
+}
+
+.ld-agent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.ld-agent-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 24px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+}
+.ld-agent-row:hover {
+    transform: translateX(6px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+.ld-agent-emoji {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    background: rgba(59,130,246,0.1);
+    color: var(--accent-color);
+    flex-shrink: 0;
+}
+
+.ld-agent-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.ld-agent-text strong {
+    font-size: 0.97rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.ld-agent-text span {
+    font-size: 0.83rem;
+    color: var(--text-secondary);
+}
+
+/* ── HOW IT WORKS FLOW ────────────────────────────────────────
+   4 numbered steps separated by chevron arrows.
+   ------------------------------------------------------------ */
+.ld-flow {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.ld-flow-step {
+    flex: 1;
+    min-width: 200px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.ld-flow-index {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent-color);
+    opacity: 0.35;
+    line-height: 1;
+}
+.ld-flow-step h4 {
+    font-size: 1rem;
+    font-weight: 700;
+}
+.ld-flow-step p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.ld-flow-arrow {
+    flex-shrink: 0;
+    color: var(--text-secondary);
+    opacity: 0.35;
+    font-size: 1rem;
+    align-self: center;
+    padding: 0 8px;
+}
+
+/* ── CTA BAND ─────────────────────────────────────────────────
+   Full-width call-to-action at the bottom of the page.
+   ------------------------------------------------------------ */
+.ld-cta-section {
+    padding: 80px 0 120px;
+}
+
+.ld-cta-box {
+    text-align: center;
+    padding: 64px 48px;
+    background: linear-gradient(
+        135deg,
+        rgba(59,130,246,0.08) 0%,
+        rgba(168,85,247,0.06) 100%
+    );
+    border-color: rgba(59,130,246,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+.ld-cta-box h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    max-width: 600px;
+    line-height: 1.2;
+}
+.ld-cta-box p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: 480px;
+    line-height: 1.6;
+}
+
+/* ── FOOTER ───────────────────────────────────────────────────
+   Minimal footer strip.
+   ------------------------------------------------------------ */
+.ld-footer {
+    border-top: 1px solid var(--border-color);
+    padding: 40px 0;
+}
+
+.ld-footer-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+}
+
+.ld-footer-brand {
+    font-size: 1.1rem;
+}
+
+.ld-footer-tag {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.ld-footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    justify-content: center;
+}
+.ld-footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+}
+.ld-footer-links a:hover { color: var(--accent-color); }
+
+.ld-footer-copy {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    opacity: 0.6;
+}
+
+/* ── SCROLL-REVEAL UTILITY ────────────────────────────────────
+   Added via JS to elements that should fade in on scroll.
+   ------------------------------------------------------------ */
+.ld-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.ld-reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ── RESPONSIVE ────────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .ld-hero-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+        text-align: center;
+    }
+    .ld-hero-copy {
+        align-items: center;
+    }
+    .ld-hero-sub { max-width: 100%; }
+    .ld-hero-trust { justify-content: center; }
+
+    .ld-hero-mockup {
+        order: -1;
+    }
+    .ld-floating-report { right: 0; bottom: -28px; }
+    .ld-floating-history { left: 0; top: 40px; }
+
+    .ld-feature-grid { grid-template-columns: 1fr; }
+    .ld-stats-row    { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+
+    .ld-flow { flex-direction: column; }
+    .ld-flow-arrow { display: none; }
+    .ld-flow-step  { min-width: unset; width: 100%; }
+}
+
+@media (max-width: 600px) {
+    .ld-nav-links { display: none; }
+    .ld-container { padding: 0 18px; }
+    .ld-section   { padding: 64px 0; }
+    .ld-stats-row { grid-template-columns: 1fr 1fr; }
+    .ld-cta-box   { padding: 40px 24px; }
+
+    .ld-floating-report,
+    .ld-floating-history { display: none; }
+}

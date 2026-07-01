@@ -79,6 +79,19 @@ const api = {
         return this.request('/chat/history');
     },
 
+    // ── Chat Sessions (last 5) ──────────────────────────────────────────
+    async getChatSessions() {
+        return this.request('/chat/sessions');
+    },
+
+    async getChatSession(chatId) {
+        return this.request(`/chat/sessions/${chatId}`);
+    },
+
+    async deleteChatSession(chatId) {
+        return this.request(`/chat/sessions/${chatId}`, { method: 'DELETE' });
+    },
+
     // ── Reports ──────────────────────────────────────────────────────────
     async getReports() {
         return this.request('/reports/');

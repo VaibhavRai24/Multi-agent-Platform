@@ -13,11 +13,13 @@
     <!-- Marked.js (Markdown rendering) -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="css/style.css?v=4">
+    <link rel="stylesheet" href="css/style.css?v=6">
     <link rel="stylesheet" href="css/reports.css?v=1">
+    <link rel="stylesheet" href="css/trace.css?v=1">
 </head>
 <body>
     <div id="toast-container" class="toast-container"></div>
+    <!-- BUILD MARKER: if you can see this comment in view-source, index.html is fresh. v=8 -->
 
     <div class="app-layout">
         <!-- Sidebar -->
@@ -83,6 +85,10 @@
                             <option value="report">📑 Report Writer</option>
                         </select>
                     </div>
+                    <button class="trace-toggle-btn" onclick="traceApp.toggle()" title="View agent communication log">
+                        <i class="fa-solid fa-diagram-project"></i> Agent Trace
+                        <span class="trace-badge" id="trace-badge">0</span>
+                    </button>
                     <div id="rag-context-banner" class="rag-banner hidden">
                         <i class="fa-solid fa-book-open"></i>
                         <span>Querying your <strong>Document Knowledge Base</strong></span>
@@ -262,6 +268,30 @@
         </div>
     </div>
 
+    <!-- Agent Communication Log Panel -->
+    <div id="trace-panel" class="trace-panel">
+        <div class="trace-panel-header">
+            <div class="trace-panel-title">
+                <i class="fa-solid fa-diagram-project"></i> Agent Communication Log
+            </div>
+            <button class="trace-panel-close" onclick="traceApp.close()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="trace-memory-strip" id="trace-memory-strip">
+            <div class="trace-memory-label"><i class="fa-solid fa-brain"></i> Working Memory</div>
+            <span class="trace-memory-empty">Empty — will populate as agents run.</span>
+        </div>
+        <div class="trace-body" id="trace-body">
+            <div class="trace-empty">
+                <i class="fa-solid fa-diagram-project"></i>
+                <p>No agent trace yet. Send a message to see how agents collaborate.</p>
+            </div>
+        </div>
+        <div class="trace-footer" id="trace-footer">
+            <span class="trace-footer-total"><i class="fa-solid fa-diagram-project"></i> 0 agent steps</span>
+            <span>0 ms total</span>
+        </div>
+    </div>
+
     <!-- Report Viewer Modal -->
     <div id="report-view-modal" class="modal-overlay hidden">
         <div class="modal-box glass-panel modal-box-wide">
@@ -274,10 +304,12 @@
     </div>
 
     <!-- Scripts (reports.js must come before chat.js so reportApp is defined first) -->
-    <script src="js/api.js?v=4"></script>
-    <script src="js/app.js?v=4"></script>
+    <script src="js/api.js?v=5"></script>
+    <script src="js/app.js?v=5"></script>
     <script src="js/reports.js?v=1"></script>
-    <script src="js/chat.js?v=4"></script>
+    <script src="js/history.js?v=1"></script>
+    <script src="js/trace.js?v=2"></script>
+    <script src="js/chat.js?v=8"></script>
     <script src="js/documents.js?v=4"></script>
 </body>
 </html>

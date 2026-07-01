@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusAI &mdash; Enterprise Multi-Agent AI Platform</title>
+    <meta name="description" content="NexusAI routes every question to the right agent, grounds answers in your own documents, and turns the good ones into reports, automatically.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Shared product theme + landing-only styles -->
+    <link rel="stylesheet" href="css/style.css?v=5">
+    <link rel="stylesheet" href="css/landing.css?v=1">
+</head>
+<body class="landing-body">
+
+    <!-- Nav -->
+    <header class="ld-nav" id="ld-nav">
+        <div class="ld-container ld-nav-inner">
+            <div class="ld-brand">
+                <span class="ld-brand-mark"><i class="fa-solid fa-diagram-project"></i></span>
+                Nexus<span class="highlight">AI</span>
+            </div>
+            <nav class="ld-nav-links">
+                <a href="#features">Features</a>
+                <a href="#workflow">How it works</a>
+                <a href="#agents">Agents</a>
+            </nav>
+            <div class="ld-nav-actions">
+                <button class="ld-icon-btn" id="ld-theme-toggle" title="Toggle theme" aria-label="Toggle theme">
+                    <i class="fa-solid fa-circle-half-stroke"></i>
+                </button>
+                <a href="login.html" class="ld-link-btn">Sign in</a>
+                <a href="register.html" class="primary-btn ld-cta-btn">Get started</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="ld-hero">
+            <div class="ld-hero-glow" aria-hidden="true"></div>
+            <div class="ld-container ld-hero-grid">
+                <div class="ld-hero-copy">
+                    <span class="ld-eyebrow"><i class="fa-solid fa-route"></i> Auto-routed multi-agent platform</span>
+                    <h1>One inbox for every question.<br>The <span class="highlight">right agent</span>, every time.</h1>
+                    <p class="ld-hero-sub">
+                        NexusAI reads each question, decides whether it needs the web, your documents, or a summary
+                        pass, and answers, citing exactly where the answer came from. Useful answers can be saved
+                        as a report with one click.
+                    </p>
+                    <div class="ld-hero-actions">
+                        <a href="register.html" class="primary-btn ld-cta-btn ld-cta-lg">
+                            <i class="fa-solid fa-bolt"></i> Start for free
+                        </a>
+                        <a href="#workflow" class="ld-ghost-btn">
+                            See how routing works <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="ld-hero-trust">
+                        <div class="ld-trust-item"><i class="fa-solid fa-lock"></i> Your documents stay in your knowledge base</div>
+                        <div class="ld-trust-item"><i class="fa-solid fa-clock-rotate-left"></i> Last 5 conversations always one click away</div>
+                    </div>
+                </div>
+
+                <!-- Signature element: live recreation of the actual chat UI -->
+                <div class="ld-hero-mockup">
+                    <div class="ld-mockup-window glass-panel">
+                        <div class="ld-mockup-titlebar">
+                            <div class="ld-mockup-dots"><span></span><span></span><span></span></div>
+                            <span class="ld-mockup-titletext">Chat Interface</span>
+                        </div>
+                        <div class="ld-mockup-agentbar">
+                            <i class="fa-solid fa-robot"></i>
+                            <span>Agent Mode:</span>
+                            <span class="ld-mockup-pill" id="ld-agent-pill">Auto Route</span>
+                        </div>
+                        <div class="ld-mockup-msg ld-mockup-msg-user">
+                            <div class="ld-mockup-bubble">What changed in our Q2 vendor contracts vs Q1?</div>
+                        </div>
+                        <div class="ld-mockup-msg ld-mockup-msg-bot">
+                            <div class="ld-mockup-avatar"><i class="fa-solid fa-robot"></i></div>
+                            <div class="ld-mockup-bubble">
+                                <span id="ld-type-target"></span><span class="ld-cursor">|</span>
+                            </div>
+                        </div>
+                        <div class="ld-mockup-sources" id="ld-mockup-sources">
+                            <span class="source-label"><i class="fa-solid fa-book-open"></i> From your documents:</span>
+                            <span class="source-pill"><i class="fa-regular fa-file-pdf"></i> vendor_contract_q1.pdf</span>
+                            <span class="source-pill"><i class="fa-regular fa-file-pdf"></i> vendor_contract_q2.pdf</span>
+                        </div>
+                    </div>
+                    <div class="ld-floating-card ld-floating-report">
+                        <i class="fa-regular fa-file-lines"></i>
+                        <div>
+                            <strong>Report saved</strong>
+                            <span>Q2 Vendor Comparison.docx</span>
+                        </div>
+                    </div>
+                    <div class="ld-floating-card ld-floating-history">
+                        <i class="fa-regular fa-clock"></i>
+                        <div>
+                            <strong>5 sessions kept</strong>
+                            <span>Pick up any chat instantly</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stat strip -->
+        <section class="ld-stats">
+            <div class="ld-container ld-stats-row">
+                <div class="ld-stat"><span class="ld-stat-num">5</span><span class="ld-stat-label">Specialist agents on tap</span></div>
+                <div class="ld-stat"><span class="ld-stat-num">PDF / DOCX / XLSX</span><span class="ld-stat-label">Documents indexed automatically</span></div>
+                <div class="ld-stat"><span class="ld-stat-num">1 click</span><span class="ld-stat-label">From answer to saved report</span></div>
+                <div class="ld-stat"><span class="ld-stat-num">Last 5</span><span class="ld-stat-label">Conversations always at hand</span></div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="ld-section" id="features">
+            <div class="ld-container">
+                <div class="ld-section-head">
+                    <span class="ld-eyebrow"><i class="fa-solid fa-layer-group"></i> Built around three workspaces</span>
+                    <h2>Everything routes through the same three places you already use.</h2>
+                </div>
+
+                <div class="ld-feature-grid">
+                    <article class="ld-feature-card glass-panel">
+                        <div class="ld-feature-icon" style="--icon-color:#3b82f6"><i class="fa-regular fa-comments"></i></div>
+                        <h3>Chat Interface</h3>
+                        <p>Ask in plain language. Auto Route inspects each question and picks web search, document
+                        RAG, summarization, or a report-writing pass, or pick the mode yourself.</p>
+                        <a class="ld-feature-link" href="#agents">See agent modes <i class="fa-solid fa-arrow-right"></i></a>
+                    </article>
+
+                    <article class="ld-feature-card glass-panel">
+                        <div class="ld-feature-icon" style="--icon-color:#a855f7"><i class="fa-regular fa-folder-open"></i></div>
+                        <h3>Document Center</h3>
+                        <p>Drop in PDFs, Word docs, spreadsheets, or images. Each file is chunked and indexed into
+                        your private knowledge base so RAG mode can cite it by name.</p>
+                        <a class="ld-feature-link" href="#workflow">See how indexing works <i class="fa-solid fa-arrow-right"></i></a>
+                    </article>
+
+                    <article class="ld-feature-card glass-panel">
+                        <div class="ld-feature-icon" style="--icon-color:#10b981"><i class="fa-regular fa-file-lines"></i></div>
+                        <h3>Generated Reports</h3>
+                        <p>When an answer is substantial, NexusAI auto-saves it and offers to name it. Keep it as
+                        Markdown or export a formatted Word document in one click.</p>
+                        <a class="ld-feature-link" href="register.html">Try it free <i class="fa-solid fa-arrow-right"></i></a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Agent modes detail -->
+        <section class="ld-section ld-agents-section" id="agents">
+            <div class="ld-container">
+                <div class="ld-section-head">
+                    <span class="ld-eyebrow"><i class="fa-solid fa-robot"></i> Agent modes</span>
+                    <h2>Auto Route picks one of these for you, or take the wheel yourself.</h2>
+                </div>
+                <div class="ld-agent-list">
+                    <div class="ld-agent-row glass-panel">
+                        <span class="ld-agent-emoji"><i class="fa-solid fa-robot"></i></span>
+                        <div class="ld-agent-text"><strong>Auto Route</strong><span>Default. The router LLM reads intent and chooses for you</span></div>
+                    </div>
+                    <div class="ld-agent-row glass-panel">
+                        <span class="ld-agent-emoji"><i class="fa-solid fa-globe"></i></span>
+                        <div class="ld-agent-text"><strong>Web Search</strong><span>Pulls live results for anything outside your documents</span></div>
+                    </div>
+                    <div class="ld-agent-row glass-panel">
+                        <span class="ld-agent-emoji"><i class="fa-solid fa-book-open"></i></span>
+                        <div class="ld-agent-text"><strong>RAG Document Analysis</strong><span>Answers strictly from your indexed knowledge base, with citations</span></div>
+                    </div>
+                    <div class="ld-agent-row glass-panel">
+                        <span class="ld-agent-emoji"><i class="fa-solid fa-file-pen"></i></span>
+                        <div class="ld-agent-text"><strong>Summary Agent</strong><span>Condenses long documents or threads into a tight brief</span></div>
+                    </div>
+                    <div class="ld-agent-row glass-panel">
+                        <span class="ld-agent-emoji"><i class="fa-solid fa-file-lines"></i></span>
+                        <div class="ld-agent-text"><strong>Report Writer</strong><span>Drafts a structured, exportable report from the conversation</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it works -->
+        <section class="ld-section" id="workflow">
+            <div class="ld-container">
+                <div class="ld-section-head">
+                    <span class="ld-eyebrow"><i class="fa-solid fa-diagram-next"></i> From question to answer</span>
+                    <h2>What happens between your message and the reply.</h2>
+                </div>
+
+                <div class="ld-flow">
+                    <div class="ld-flow-step glass-panel">
+                        <span class="ld-flow-index">01</span>
+                        <h4>You ask</h4>
+                        <p>Type a question or drop a request into chat. Switch agent mode any time, or leave it on Auto Route.</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right ld-flow-arrow" aria-hidden="true"></i>
+                    <div class="ld-flow-step glass-panel">
+                        <span class="ld-flow-index">02</span>
+                        <h4>NexusAI routes it</h4>
+                        <p>The router decides: search the web, query your document index, summarize, or draft a report, then runs that agent.</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right ld-flow-arrow" aria-hidden="true"></i>
+                    <div class="ld-flow-step glass-panel">
+                        <span class="ld-flow-index">03</span>
+                        <h4>You get a grounded answer</h4>
+                        <p>Replies that used your documents show exactly which files were cited, so nothing is a black box.</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right ld-flow-arrow" aria-hidden="true"></i>
+                    <div class="ld-flow-step glass-panel">
+                        <span class="ld-flow-index">04</span>
+                        <h4>Worth keeping? It's saved</h4>
+                        <p>Substantial answers are auto-saved as reports and the last 5 chats stay one click away in your sidebar.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="ld-cta-section">
+            <div class="ld-container ld-cta-box glass-panel">
+                <h2>Stop re-explaining yourself to a blank chat box.</h2>
+                <p>Create an account. Your first document upload, chat, and saved report take about two minutes.</p>
+                <a href="register.html" class="primary-btn ld-cta-btn ld-cta-lg">
+                    <i class="fa-solid fa-bolt"></i> Create your free account
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="ld-footer">
+        <div class="ld-container ld-footer-inner">
+            <div class="ld-brand ld-footer-brand">
+                <span class="ld-brand-mark"><i class="fa-solid fa-diagram-project"></i></span>
+                Nexus<span class="highlight">AI</span>
+            </div>
+            <p class="ld-footer-tag">Enterprise multi-agent platform for chat, documents, and reports.</p>
+            <div class="ld-footer-links">
+                <a href="login.html">Sign in</a>
+                <a href="register.html">Create account</a>
+                <a href="#features">Features</a>
+                <a href="#workflow">How it works</a>
+            </div>
+            <p class="ld-footer-copy">&copy; <span id="ld-year"></span> NexusAI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/landing.js?v=1"></script>
+</body>
+</html>

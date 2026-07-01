@@ -447,6 +447,16 @@ body {
     border-radius: 20px;
     font-size: 0.78rem;
     font-weight: 500;
+    text-decoration: none;
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: var(--transition-fast);
+}
+a.source-pill:hover {
+    background: rgba(59,130,246,0.18);
+    border-color: var(--accent-color);
 }
 
 /* ── Misc ── */
@@ -568,3 +578,73 @@ body {
 .role-badge { background: rgba(16, 185, 129, 0.2); color: var(--success); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-top: 8px; }
 .profile-stats { display: flex; justify-content: space-between; margin-top: 24px; text-align: center; }
 .profile-stats .value { display: block; font-size: 1.5rem; font-weight: 700; color: var(--accent-color); }
+
+/* ── Chat History Sidebar (last 5 sessions) ── */
+.history-list { display: flex; flex-direction: column; gap: 2px; }
+.history-item {
+    position: relative;
+    padding: 9px 10px;
+    padding-right: 34px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-secondary);
+    transition: var(--transition-fast);
+}
+.history-item i.fa-message { font-size: 0.85rem; flex-shrink: 0; opacity: 0.8; }
+.history-item:hover { background: rgba(255, 255, 255, 0.05); color: var(--text-primary); }
+[data-theme="light"] .history-item:hover { background: rgba(0, 0, 0, 0.05); }
+.history-item.active-session { background: rgba(59, 130, 246, 0.1); color: var(--accent-color); }
+
+.history-item-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+    gap: 1px;
+}
+.history-item-title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.history-item-date {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+.history-delete-btn {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    opacity: 0;
+    transition: var(--transition-fast);
+}
+.history-item:hover .history-delete-btn { opacity: 1; }
+.history-delete-btn:hover { background: rgba(239,68,68,0.15); color: #ef4444; }
+
+.history-empty {
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    font-style: italic;
+    padding: 8px 10px;
+    list-style: none;
+}
+

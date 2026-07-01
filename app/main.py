@@ -26,8 +26,8 @@ if os.path.exists(FRONTEND_DIR):
     
     # Mount HTML files directly or root redirect
     @app.get("/")
-    def serve_frontend_index():
-        return RedirectResponse(url="/index.html")
+    def serve_landing_page():
+        return RedirectResponse(url="/landing.html")
         
     app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
 else:

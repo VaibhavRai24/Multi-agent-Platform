@@ -1,0 +1,338 @@
+/* ============================================================
+   trace.css  —  Agent Communication Log panel styles
+   ============================================================ */
+
+/* ── Toggle button (fixed in chat header) ─────────────────── */
+.trace-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(168, 85, 247, 0.08);
+    border: 1px solid rgba(168, 85, 247, 0.28);
+    color: #a855f7;
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-family: var(--font-family);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    white-space: nowrap;
+}
+.trace-toggle-btn:hover {
+    background: rgba(168, 85, 247, 0.16);
+    border-color: #a855f7;
+    color: #c084fc;
+}
+.trace-toggle-btn .trace-badge {
+    background: #a855f7;
+    color: #fff;
+    border-radius: 10px;
+    padding: 1px 7px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    min-width: 18px;
+    text-align: center;
+}
+
+/* ── Drawer panel ─────────────────────────────────────────── */
+.trace-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 100vh;
+    z-index: 5000;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-sidebar);
+    border-left: 1px solid var(--border-color);
+    box-shadow: -12px 0 48px rgba(0, 0, 0, 0.35);
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.trace-panel.open {
+    transform: translateX(0);
+}
+
+/* ── Panel header ─────────────────────────────────────────── */
+.trace-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+.trace-panel-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.trace-panel-title i {
+    color: #a855f7;
+    font-size: 1rem;
+}
+.trace-panel-close {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: var(--transition-fast);
+}
+.trace-panel-close:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.06);
+}
+[data-theme="light"] .trace-panel-close:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* ── Memory strip (below header) ─────────────────────────── */
+.trace-memory-strip {
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(59, 130, 246, 0.04);
+    flex-shrink: 0;
+}
+.trace-memory-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--accent-color);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.trace-memory-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+.trace-memory-pill {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: var(--text-secondary);
+    border-radius: 12px;
+    padding: 2px 9px;
+    font-size: 0.73rem;
+}
+.trace-memory-pill strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+.trace-memory-empty {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* ── Scrollable step list ─────────────────────────────────── */
+.trace-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* empty state */
+.trace-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 12px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+.trace-empty i {
+    font-size: 2.2rem;
+    opacity: 0.3;
+    color: #a855f7;
+}
+.trace-empty p {
+    font-size: 0.85rem;
+    max-width: 220px;
+    line-height: 1.5;
+}
+
+/* ── Individual step card ─────────────────────────────────── */
+.trace-step {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-color);
+    animation: traceStepIn 0.35s ease both;
+    position: relative;
+}
+.trace-step:last-child { border-bottom: none; }
+
+@keyframes traceStepIn {
+    from { opacity: 0; transform: translateX(16px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Connector line */
+.trace-step::before {
+    content: '';
+    position: absolute;
+    left: 18px;
+    top: 44px;
+    bottom: -1px;
+    width: 2px;
+    background: var(--border-color);
+}
+.trace-step:last-child::before { display: none; }
+
+/* Icon dot */
+.trace-step-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+}
+
+/* Agent colour coding */
+.trace-step[data-agent="router"]   .trace-step-icon { background: rgba(59,130,246,0.15);  color: #3b82f6; }
+.trace-step[data-agent="web"]      .trace-step-icon { background: rgba(16,185,129,0.15);  color: #10b981; }
+.trace-step[data-agent="rag"]      .trace-step-icon { background: rgba(168,85,247,0.15);  color: #a855f7; }
+.trace-step[data-agent="summary"]  .trace-step-icon { background: rgba(245,158,11,0.15);  color: #f59e0b; }
+.trace-step[data-agent="writer"]   .trace-step-icon { background: rgba(239,68,68,0.12);   color: #ef4444; }
+.trace-step[data-agent="unknown"]  .trace-step-icon { background: rgba(100,116,139,0.12); color: #64748b; }
+
+.trace-step-body {
+    flex: 1;
+    min-width: 0;
+}
+.trace-step-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 3px;
+}
+.trace-step-agent {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+.trace-step-ms {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+.trace-step-action {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+}
+.trace-step-output {
+    font-size: 0.83rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* expandable metadata */
+.trace-step-meta {
+    margin-top: 8px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 8px 10px;
+    display: none;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-family: monospace;
+    line-height: 1.5;
+}
+[data-theme="light"] .trace-step-meta {
+    background: rgba(0,0,0,0.02);
+}
+.trace-step-meta.visible { display: block; }
+
+.trace-step-expand {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    cursor: pointer;
+    padding: 3px 0;
+    margin-top: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.15s;
+}
+.trace-step-expand:hover { color: var(--text-primary); }
+
+/* ── Source pills inside trace body ───────────────────────── */
+.trace-sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 6px;
+}
+.trace-source-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 9px;
+    background: rgba(168,85,247,0.08);
+    border: 1px solid rgba(168,85,247,0.2);
+    color: #a855f7;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ── Footer summary bar ───────────────────────────────────── */
+.trace-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+}
+.trace-footer-total {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.trace-footer-total i { color: #a855f7; }
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 600px) {
+    .trace-panel { width: 100vw; }
+}
