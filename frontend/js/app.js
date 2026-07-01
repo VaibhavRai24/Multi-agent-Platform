@@ -6,7 +6,58 @@ const app = {
     },
 
     bindEvents() {
-        // Just general events can go here
+        // If the window is resized from mobile back to desktop width,
+        // clear the mobile slide-out state (don't touch desktop collapse state).
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
+                if (sidebar) sidebar.classList.remove('open');
+                if (overlay) overlay.classList.remove('open');
+            }
+        });
+    },
+
+    openSidebar() {
+        if (window.innerWidth <= 768) {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar) sidebar.classList.add('open');
+            if (overlay) overlay.classList.add('open');
+        } else {
+            const layout = document.getElementById('app-layout');
+            if (layout) layout.classList.remove('sidebar-collapsed');
+        }
+    },
+
+    closeSidebar() {
+        if (window.innerWidth <= 768) {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar) sidebar.classList.remove('open');
+            if (overlay) overlay.classList.remove('open');
+        } else {
+            const layout = document.getElementById('app-layout');
+            if (layout) layout.classList.add('sidebar-collapsed');
+        }
+    },
+
+    toggleSidebar() {
+        if (window.innerWidth <= 768) {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar && sidebar.classList.contains('open')) {
+                this.closeSidebar();
+            } else {
+                this.openSidebar();
+            }
+        } else {
+            const layout = document.getElementById('app-layout');
+            if (layout && layout.classList.contains('sidebar-collapsed')) {
+                this.openSidebar();
+            } else {
+                this.closeSidebar();
+            }
+        }
     },
 
     navigate(pageId) {
@@ -31,7 +82,10 @@ const app = {
         // Highlight nav item
         const navItem = document.querySelector(`.nav-links li[data-page="${pageId}"]`);
         if (navItem) navItem.classList.add('active');
-        
+
+        // On mobile, close the slide-out sidebar after picking a page
+        if (window.innerWidth <= 768) this.closeSidebar();
+
         // Trigger specific page logic
         if (pageId === 'documents-page') docApp.loadDocuments();
         if (pageId === 'reports-page') reportApp.loadReports();

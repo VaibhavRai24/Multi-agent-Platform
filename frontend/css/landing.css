@@ -817,4 +817,28 @@
 
     .ld-floating-report,
     .ld-floating-history { display: none; }
+
+    /* Nav actions cramp on narrow phones — tighten spacing and
+       keep everything on one line instead of wrapping/overlapping. */
+    .ld-nav-inner { height: auto; min-height: 60px; padding: 8px 0; }
+    .ld-nav-actions { gap: 6px; flex-wrap: nowrap; }
+    .ld-icon-btn { width: 32px; height: 32px; font-size: 0.8rem; flex-shrink: 0; }
+    .ld-nav-actions .ld-link-btn {
+        padding: 8px 8px;
+        font-size: 0.82rem;
+        white-space: nowrap;
+    }
+    .ld-nav-actions .ld-cta-btn {
+        padding: 8px 14px;
+        font-size: 0.82rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    .ld-brand { font-size: 1.1rem; }
+}
+
+@media (max-width: 380px) {
+    /* Extremely narrow phones: drop the theme toggle to give the
+       two real actions (Sign in / Get started) room to breathe. */
+    .ld-nav-actions .ld-icon-btn { display: none; }
 }

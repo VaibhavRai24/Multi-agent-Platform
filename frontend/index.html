@@ -13,19 +13,25 @@
     <!-- Marked.js (Markdown rendering) -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="css/style.css?v=6">
+    <link rel="stylesheet" href="css/style.css?v=9">
     <link rel="stylesheet" href="css/reports.css?v=1">
     <link rel="stylesheet" href="css/trace.css?v=1">
 </head>
 <body>
     <div id="toast-container" class="toast-container"></div>
-    <!-- BUILD MARKER: if you can see this comment in view-source, index.html is fresh. v=8 -->
 
-    <div class="app-layout">
+    <!-- Sidebar overlay (mobile tap-to-close) -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="app.closeSidebar()"></div>
+
+    <div class="app-layout" id="app-layout">
         <!-- Sidebar -->
-        <nav class="sidebar">
+        <nav class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2>Nexus<span class="highlight">AI</span></h2>
+                <!-- X button inside sidebar, visible on mobile -->
+                <button class="sidebar-close-btn" onclick="app.closeSidebar()" title="Hide sidebar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
             
             <button class="new-chat-btn" onclick="app.startNewChat()">
@@ -71,6 +77,26 @@
 
         <!-- Main Content Area -->
         <main class="main-content">
+
+            <!-- Floating button to bring the sidebar back once it's been
+                 collapsed on desktop (mirrors Claude Desktop / ChatGPT) -->
+            <button class="sidebar-reveal-btn" onclick="app.toggleSidebar()" title="Show sidebar">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <!-- Mobile top bar (hidden on desktop) -->
+            <div class="mobile-topbar">
+                <button class="mobile-menu-btn" onclick="app.toggleSidebar()" title="Toggle menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <span class="mobile-topbar-brand">Nexus<span class="highlight">AI</span></span>
+                <div class="mobile-topbar-actions">
+                    <button class="mobile-trace-btn" onclick="traceApp.toggle()" title="Agent Trace">
+                        <i class="fa-solid fa-diagram-project"></i>
+                        <span class="mobile-trace-badge" id="mobile-trace-badge">0</span>
+                    </button>
+                </div>
+            </div>
             
             <!-- Chat Page -->
             <section id="chat-page" class="page-section active">
@@ -305,7 +331,7 @@
 
     <!-- Scripts (reports.js must come before chat.js so reportApp is defined first) -->
     <script src="js/api.js?v=5"></script>
-    <script src="js/app.js?v=5"></script>
+    <script src="js/app.js?v=7"></script>
     <script src="js/reports.js?v=1"></script>
     <script src="js/history.js?v=1"></script>
     <script src="js/trace.js?v=2"></script>
